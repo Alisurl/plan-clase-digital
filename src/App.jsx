@@ -1,6 +1,7 @@
 import HeaderClase from './components/HeaderClase';
 import ObjetivosCard from './components/ObjetivosCard';
 import ActividadItem from './components/ActividadItem';
+import ListaActividades from './components/ListaActividades';
 
 export default function App() {
   const actividades = [
@@ -14,6 +15,7 @@ export default function App() {
     <main style={{ maxWidth: '650px', margin: '40px auto', fontFamily: 'system-ui, sans-serif', padding: '0 16px' }}>
       <HeaderClase />
       <ObjetivosCard />
+      <ListaActividades />
       <h3 style={{ color: '#334155', marginBottom: '12px' }}>📋 Tareas de la Sesión</h3>
       {actividades.map((actividad, index) => (
         <ActividadItem key={index} tarea={actividad} />
