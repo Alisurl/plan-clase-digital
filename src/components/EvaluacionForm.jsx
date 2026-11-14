@@ -8,9 +8,9 @@ export default function EvaluacionForm() {
   const [mensajeFeedback, setMensajeFeedback] = useState(null);
   const [participaciones, setParticipaciones] = useState([]);
 
-  // REEMPLAZA ESTA LÍNEA CON TU URL EXACTA DE LA LÍNEA 9 DE ListaActividades.jsx
-  const NOCODB_URL = 'https://app.nocodb.com/api/v2/tables/m9yrynzwlwen3w.../records';
-  const XC_TOKEN = 'nc_pat_LOTi44Kaq0inegyZxu9QcIQTWZSfeNXklRr9ptZ4';
+  // URL de tu tabla PlanClaseDigital y Token activo en NocoDB
+  const NOCODB_URL = 'https://app.nocodb.com/api/v2/tables/m9649gmmamejwa9/records';
+  const XC_TOKEN = 'nc_pat_qdLhWizjk9UlqZg0kgJtk3ocf8Muuorjrrn7JUbX';
 
   const cargarParticipaciones = async () => {
     try {
