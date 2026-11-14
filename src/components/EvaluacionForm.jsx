@@ -8,7 +8,7 @@ export default function EvaluacionForm() {
   const [mensajeFeedback, setMensajeFeedback] = useState(null);
   const [participaciones, setParticipaciones] = useState([]);
 
-  // PEGA AQUÍ TU MISMA URL DE LA LÍNEA 9 DE ListaActividades.jsx
+  // REEMPLAZA ESTA LÍNEA CON TU URL EXACTA DE LA LÍNEA 9 DE ListaActividades.jsx
   const NOCODB_URL = 'https://app.nocodb.com/api/v2/tables/m9yrynzwlwen3w.../records';
   const XC_TOKEN = 'nc_pat_LOTi44Kaq0inegyZxu9QcIQTWZSfeNXklRr9ptZ4';
 
@@ -112,9 +112,10 @@ export default function EvaluacionForm() {
         maxWidth: '650px',
         margin: '32px auto',
         padding: '20px',
-        backgroundColor: '#f8fafc',
+        backgroundColor: '#ffffff',
         borderRadius: '12px',
         border: '1px solid #cbd5e1',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
       }}
     >
       <h3 style={{ color: '#0f172a', marginTop: 0 }}>
@@ -238,7 +239,7 @@ export default function EvaluacionForm() {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   style={{
-                    backgroundColor: '#ffffff',
+                    backgroundColor: '#f8fafc',
                     padding: '10px 14px',
                     borderRadius: '6px',
                     border: '1px solid #e2e8f0',

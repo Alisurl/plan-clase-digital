@@ -1,25 +1,37 @@
+import React from 'react';
 import HeaderClase from './components/HeaderClase';
 import ObjetivosCard from './components/ObjetivosCard';
-import ActividadItem from './components/ActividadItem';
 import ListaActividades from './components/ListaActividades';
+import EvaluacionForm from './components/EvaluacionForm';
+import './App.css';
 
-export default function App() {
-  const actividades = [
-    'Revisión teórica de Framer Motion en motion.dev',
-    'Configuración del repositorio común en Git',
-    'Refactorización y animación de componentes en VS Code',
-    'Despliegue de la versión interactiva en Vercel'
-  ];
-
+function App() {
   return (
-    <main style={{ maxWidth: '650px', margin: '40px auto', fontFamily: 'system-ui, sans-serif', padding: '0 16px' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#f1f5f9' }}>
       <HeaderClase />
-      <ObjetivosCard />
-      <ListaActividades />
-      <h3 style={{ color: '#334155', marginBottom: '12px' }}>📋 Tareas de la Sesión</h3>
-      {actividades.map((actividad, index) => (
-        <ActividadItem key={index} tarea={actividad} />
-      ))}
-    </main>
+      
+      <main style={{ flex: 1, padding: '0 16px' }}>
+        <ObjetivosCard />
+        <ListaActividades />
+        <EvaluacionForm />
+      </main>
+
+      <footer
+        style={{
+          textAlign: 'center',
+          padding: '20px',
+          marginTop: '40px',
+          backgroundColor: '#0f172a',
+          color: '#cbd5e1',
+          fontSize: '0.875rem',
+        }}
+      >
+        <p style={{ margin: 0 }}>
+          Plan de Clase Digital Interactivo — Tercero Básico (TIC) • Universidad Rafael Landívar 2026
+        </p>
+      </footer>
+    </div>
   );
 }
+
+export default App;
