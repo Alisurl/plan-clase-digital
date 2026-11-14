@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 export default function EvaluacionForm() {
   const [nombreEstudiante, setNombreEstudiante] = useState('');
-  const [respuestaSeleccionada, setRespuestaSeleccionada] = useState('');
+  const [comentarioForo, setComentarioForo] = useState('');
   const [enviando, setEnviando] = useState(false);
   const [mensajeFeedback, setMensajeFeedback] = useState(null);
   const [participaciones, setParticipaciones] = useState([]);
@@ -12,7 +12,7 @@ export default function EvaluacionForm() {
   const NOCODB_URL = 'https://app.nocodb.com/api/v2/tables/m9yrynzwlwen3w.../records';
   const XC_TOKEN = 'nc_pat_LOTi44Kaq0inegyZxu9QcIQTWZSfeNXklRr9ptZ4';
 
-  const cargarEvaluaciones = async () => {
+  const cargarParticipaciones = async () => {
     try {
       const res = await fetch(NOCODB_URL, {
         method: 'GET',
@@ -26,7 +26,7 @@ export default function EvaluacionForm() {
       if (data.list) {
         const filtrados = data.list.filter((item) => {
           const campos = item.fields || item;
-          return campos.category === 'Evaluación';
+          return campos.category === 'Foro';
         });
         setParticipaciones(filtrados);
       }
@@ -36,16 +36,16 @@ export default function EvaluacionForm() {
   };
 
   useEffect(() => {
-    cargarEvaluaciones();
+    cargarParticipaciones();
   }, []);
 
   const manejarEnvio = async (e) => {
     e.preventDefault();
 
-    if (!nombreEstudiante.trim() || !respuestaSeleccionada) {
+    if (!nombreEstudiante.trim() || !comentarioForo.trim()) {
       setMensajeFeedback({
         tipo: 'error',
-        texto: 'Por favor escribe tu nombre y selecciona una respuesta.',
+        texto: 'Por favor escribe tu nombre y tu comentario para participar en el foro.',
       });
       return;
     }
@@ -53,16 +53,13 @@ export default function EvaluacionForm() {
     setEnviando(true);
     setMensajeFeedback(null);
 
-    const esCorrecta = respuestaSeleccionada === 'POST';
-    const resultadoTexto = esCorrecta
-      ? `${nombreEstudiante.trim()} — Respuesta: POST (¡Correcto! 100 pts)`
-      : `${nombreEstudiante.trim()} — Respuesta: ${respuestaSeleccionada} (Revisar concepto)`;
+    const textoPublicacion = `${nombreEstudiante.trim()}: "${comentarioForo.trim()}"`;
 
     const nuevoRegistro = {
-      TITLE: resultadoTexto,
+      TITLE: textoPublicacion,
       duration: '5 min',
-      completed: esCorrecta,
-      category: 'Evaluación',
+      completed: true,
+      category: 'Foro',
     };
 
     try {
@@ -80,15 +77,13 @@ export default function EvaluacionForm() {
       }
 
       setMensajeFeedback({
-        tipo: esCorrecta ? 'exito' : 'aviso',
-        texto: esCorrecta
-          ? `¡Excelente trabajo, ${nombreEstudiante}! Tu respuesta correcta se guardó en la nube.`
-          : `Registro guardado, ${nombreEstudiante}. Recuerda: para crear registros nuevos en una API REST usamos el método POST.`,
+        tipo: 'exito',
+        texto: `¡Gracias por tu aporte, ${nombreEstudiante}! Tu comentario ya se publicó en el foro.`,
       });
 
       setNombreEstudiante('');
-      setRespuestaSeleccionada('');
-      cargarEvaluaciones();
+      setComentarioForo('');
+      cargarParticipaciones();
     } catch (err) {
       setParticipaciones((prev) => [
         ...prev,
@@ -96,7 +91,7 @@ export default function EvaluacionForm() {
       ]);
       setMensajeFeedback({
         tipo: 'aviso',
-        texto: `Respuesta registrada en sesión local (${err.message}).`,
+        texto: `Comentario publicado en sesión local (${err.message}).`,
       });
     } finally {
       setEnviando(false);
@@ -119,10 +114,10 @@ export default function EvaluacionForm() {
       }}
     >
       <h3 style={{ color: '#0f172a', marginTop: 0 }}>
-        📝 Evaluación Rápida — Tercero Básico (TIC)
+        💬 Foro de Participación — Tercero Básico (TIC)
       </h3>
       <p style={{ color: '#475569', fontSize: '0.95rem' }}>
-        Comprueba lo aprendido sobre bases de datos en la nube y envía tu resultado a NocoDB:
+        Comparte tu opinión, duda o conclusión sobre el tema de la clase:
       </p>
 
       <form
@@ -134,7 +129,7 @@ export default function EvaluacionForm() {
             htmlFor="nombre-alumno"
             style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#1e293b' }}
           >
-            Nombre completo del estudiante:
+            Nombre del estudiante:
           </label>
           <input
             id="nombre-alumno"
@@ -154,28 +149,27 @@ export default function EvaluacionForm() {
 
         <div>
           <label
-            htmlFor="pregunta-tic"
+            htmlFor="comentario-foro"
             style={{ display: 'block', fontWeight: '600', marginBottom: '6px', color: '#1e293b' }}
           >
-            Pregunta: ¿Qué método HTTP se utiliza en fetch() para guardar un nuevo registro en NocoDB?
+            Tu comentario o aporte:
           </label>
-          <select
-            id="pregunta-tic"
-            value={respuestaSeleccionada}
-            onChange={(e) => setRespuestaSeleccionada(e.target.value)}
+          <textarea
+            id="comentario-foro"
+            rows="3"
+            placeholder="Escribe aquí lo que aprendiste hoy o tu aporte para la clase..."
+            value={comentarioForo}
+            onChange={(e) => setComentarioForo(e.target.value)}
             style={{
               width: '100%',
               padding: '10px',
               borderRadius: '8px',
               border: '1px solid #94a3b8',
-              backgroundColor: '#ffffff',
+              boxSizing: 'border-box',
+              fontFamily: 'inherit',
+              resize: 'vertical',
             }}
-          >
-            <option value="">-- Selecciona una opción --</option>
-            <option value="GET">GET (Solo consultar datos)</option>
-            <option value="POST">POST (Crear y enviar datos nuevos)</option>
-            <option value="DELETE">DELETE (Eliminar registros)</option>
-          </select>
+          />
         </div>
 
         <motion.button
@@ -193,7 +187,7 @@ export default function EvaluacionForm() {
             cursor: enviando ? 'not-allowed' : 'pointer',
           }}
         >
-          {enviando ? 'Guardando en NocoDB...' : 'Enviar Evaluación'}
+          {enviando ? 'Publicando en el foro...' : 'Publicar Comentario'}
         </motion.button>
       </form>
 
@@ -222,11 +216,11 @@ export default function EvaluacionForm() {
 
       <div style={{ marginTop: '24px' }}>
         <h4 style={{ color: '#334155', marginBottom: '10px' }}>
-          ✅ Registros recibidos en NocoDB ({participaciones.length})
+          💭 Comentarios publicados ({participaciones.length})
         </h4>
         {participaciones.length === 0 ? (
           <p style={{ color: '#64748b', fontSize: '0.875rem' }}>
-            Aún no hay evaluaciones enviadas. ¡Sé el primero en probar el formulario!
+            Aún no hay comentarios en el foro. ¡Sé el primero en participar!
           </p>
         ) : (
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
@@ -240,11 +234,15 @@ export default function EvaluacionForm() {
                   animate={{ opacity: 1, x: 0 }}
                   style={{
                     backgroundColor: '#f8fafc',
-                    padding: '10px 14px',
-                    borderRadius: '6px',
-                    border: '1px solid #e2e8f0',
-                    marginBottom: '8px',
-                    fontSize: '0.9rem',
+                    padding: '12px 14px',
+                    borderRadius: '8px',
+                    borderLeft: '4px solid #2563eb',
+                    borderTop: '1px solid #e2e8f0',
+                    borderRight: '1px solid #e2e8f0',
+                    borderBottom: '1px solid #e2e8f0',
+                    marginBottom: '10px',
+                    fontSize: '0.92rem',
+                    color: '#1e293b',
                   }}
                 >
                   {datos.TITLE || datos.title}
